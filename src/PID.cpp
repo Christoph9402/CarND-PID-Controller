@@ -26,5 +26,6 @@ double PID::TotalError() {
   /**
    * TODO: Calculate and return the total error
    */
-  return 0.0;  // TODO: Add your total error calc here!
+  double alpha = -tau_p * cte - tau_d * diff_cte - tau_i * it_cte;
+  return alpha;  // TODO: Add your total error calc here!
 }

@@ -38,9 +38,8 @@ int main() {
    * TODO: Initialize the pid variable.
    *
    */
-    double int_cte = 0.0;
-    double previous_cte = 0.0;
-    double  diff_cte;
+
+    pid.Init(0.2,0.0,0.5);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
@@ -68,11 +67,9 @@ int main() {
            *   Maybe use another PID controller to control the speed!
            */
 
-          diff_cte = cte - previous_cte;
-          previous_cte = cte;
-          int_cte = int_cte + cte;
 
-          steer_value = -tau_p * cte - tau_d * diff_cte - tau_i * it_cte;
+
+
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value 
                     << std::endl;
