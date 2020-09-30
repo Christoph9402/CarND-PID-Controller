@@ -34,7 +34,7 @@ int main() {
   uWS::Hub h;
 
   PID pid;
-    pid.Init(0.5,0.0,0.5);
+    pid.Init(0.15,0.001,1.5);
 
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
