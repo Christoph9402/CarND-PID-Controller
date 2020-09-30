@@ -34,7 +34,7 @@ int main() {
   uWS::Hub h;
 
   PID pid;
-    pid.Init(0.25,0.002,3.0);
+    pid.Init(0.5,0.0,0.5);
 
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
@@ -55,7 +55,7 @@ int main() {
           double cte = std::stod(j[1]["cte"].get<string>());
           double speed = std::stod(j[1]["speed"].get<string>());
           double angle = std::stod(j[1]["steering_angle"].get<string>());
-          double steer_value=0.0;
+          double steer_value;//=0.0;
           /**
            * TODO: Calculate steering value here, remember the steering value is
            *   [-1, 1].
@@ -63,7 +63,7 @@ int main() {
            *   Maybe use another PID controller to control the speed!
            */
           pid.UpdateError(cte);
-          steer_value = steer_value + pid.TotalError();
+          steer_value = pid.TotalError();
           if (steer_value>1.0){
               steer_value=1.0;
           }
@@ -95,7 +95,7 @@ int main() {
     std::cout << "Connected!!!" << std::endl;
   });
 
-  h.onDisconnection([&h](uWS::WebSocket<uWS::SERVER> ws, int code, 
+  h.onDisconnection([&h](uWS::WebSocket<uWS::SERVER> ws, int code,
                          char *message, size_t length) {
     ws.close();
     std::cout << "Disconnected" << std::endl;
@@ -108,7 +108,7 @@ int main() {
     std::cerr << "Failed to listen to port" << std::endl;
     return -1;
   }
-  
+
   h.run();
 }
 

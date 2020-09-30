@@ -3,10 +3,16 @@
 
 class PID {
  public:
-  /**
-   * Constructor
-   */
 
+    double previous_cte;
+    double p_error;
+    double i_error;
+    double d_error;
+
+
+    double Ki;
+    double Kd;
+    double Kp;
 
   PID();
 
@@ -19,7 +25,7 @@ class PID {
    * Initialize PID.
    * @param (Kp_, Ki_, Kd_) The initial PID coefficients
    */
-  void Init(double Kp_, double Ki_, double Kd_);
+  void Init(double Kp, double Ki, double Kd);
 
   /**
    * Update the PID error variables given cross track error.
@@ -34,16 +40,8 @@ class PID {
   double TotalError();
 
  private:
-  /**
-   * PID Errors
-   */
-  double Ki_;
-  double Kd_;
-  double Kp_;
-  double previous_cte;
-  double p_error;
-  double i_error;
-  double d_error;
+
+
   /**
    * PID Coefficients
    */
