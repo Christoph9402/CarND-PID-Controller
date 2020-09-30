@@ -6,6 +6,9 @@ class PID {
   /**
    * Constructor
    */
+   double Ki;
+   double Kd;
+   double Kp;
   PID();
 
   /**
