@@ -6,13 +6,8 @@ class PID {
   /**
    * Constructor
    */
-   double Ki;
-   double Kd;
-   double Kp;
-   double previous_cte;
-   double p_error;
-   double i_error;
-   double d_error;
+
+
   PID();
 
   /**
@@ -42,8 +37,13 @@ class PID {
   /**
    * PID Errors
    */
-
-
+  double Ki_;
+  double Kd_;
+  double Kp_;
+  double previous_cte;
+  double p_error;
+  double i_error;
+  double d_error;
   /**
    * PID Coefficients
    */

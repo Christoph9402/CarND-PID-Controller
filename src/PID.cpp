@@ -9,9 +9,9 @@ PID::PID() {}
 PID::~PID() {}
 
 void PID::Init(double Kp_, double Ki_, double Kd_) {
-   Kp_ = Kp;
-   Ki_= Ki;
-   Kd_=Kd;
+   Kp_ = Kp_;
+   Ki_= Ki_;
+   Kd_=Kd_;
    //Initializing errors and previous_cte with 0.0
    previous_cte=0.0;
    p_error=0.0;
@@ -30,10 +30,10 @@ void PID::UpdateError(double cte) {
     // D-component:
     d_error=cte-previous_cte;
     previous_cte=cte;
-
+    std::cout << "CTE: " << cte << " error_d: " << d_error << " error_p: " << p_error << " error_i: " << i_error << std::endl;
 }
 
 double PID::TotalError() {
-  return  -Kp * p_error - Kd * d_error - Ki * i_error;
+  return  Kp * p_error + Kd * d_error + Ki * i_error;
     // TODO: Add your total error calc here!
 }

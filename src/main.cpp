@@ -34,7 +34,7 @@ int main() {
   uWS::Hub h;
 
   PID pid;
-    pid.Init(0.0,0.0,0.0);
+    pid.Init(0.25,0.002,3.0);
 
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
@@ -63,7 +63,7 @@ int main() {
            *   Maybe use another PID controller to control the speed!
            */
           pid.UpdateError(cte);
-          steer_value+=pid.TotalError();
+          steer_value = steer_value + pid.TotalError();
           if (steer_value>1.0){
               steer_value=1.0;
           }
@@ -72,8 +72,9 @@ int main() {
           }
 
           // DEBUG
-            std::cout << "Total error: " << pid.TotalError() << std::endl;
+            //std::cout << "Total error: " << pid.TotalError() << std::endl;
           //std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
+
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
