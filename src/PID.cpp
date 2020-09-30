@@ -24,7 +24,7 @@ void PID::UpdateError(double cte,double cte_d,double cte_p,double cte_i) {
     cte_i=cte_i + cte;
 }
 
-double PID::TotalError() {
-  double alpha = -Kp * cte_p - Kd * cte_d - Ki * i_cte;
+double PID::TotalError(double cte_p,double cte_d, double cte_i) {
+  double alpha = -Kp * cte_p - Kd * cte_d - Ki * cte_i;
   return alpha;  // TODO: Add your total error calc here!
 }

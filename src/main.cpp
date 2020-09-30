@@ -37,6 +37,7 @@ int main() {
     pid.Init(0.2,3.0,0.01);
     double cte_p = 0.0;
     double cte_i = 0.0;
+    double cte_d = 0.0;
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
