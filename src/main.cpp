@@ -72,7 +72,7 @@ int main() {
           }
 
           // DEBUG
-            //std::cout << "Total error: " << pid.TotalError() << std::endl;
+          //std::cout << "Total error: " << pid.TotalError() << std::endl;
           //std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
 
 

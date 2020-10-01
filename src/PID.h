@@ -4,7 +4,7 @@
 class PID {
  public:
 
-    double previous_cte;
+    //double previous_cte;
     double p_error;
     double i_error;
     double d_error;
