@@ -1,6 +1,19 @@
 # CarND-Controls-PID
 Self-Driving Car Engineer Nanodegree Program
 
+
+The goal of the project is to implement a PID controller in C++ that steers a vehicle around a track inside the simulator. Criteria for passing are the error-free compilation of the code and the fine tuning of the hyperparameters. The vehicle has to drive successfully one lap around the track in the simulator and must not leave the road or drive over other surfaces. The fundamental structure is based on the procedure implemented in python during the exercises.
+To implement the code, the Init() function with hyperparameters must first be called in the Main.cpp file, which initiates the parameters Kp, Ki and Kd, and sets the values p_error, i_error and d_error to 0. After reading the cte and speed values, the double variable "steering_value" must be calculated. For this, two functions are used, which are written in the PID.cpp file.
+The first function is the "UpdateError" function, which uses the cte value as an input. In this function the variables "d_error", "p_error" and "i_error", which were previously initiated with the value of 0, are calculated. As described in lesson 12.8, the "d_error" must be calculated by subtracting the value of the previous cte from the cte. I have subtracted the value of p_error here, because it has the value 0 and therefore is omitted at the start. In all subsequent calculations p_error is however equal to cte of the previous step. This is the case because I decided to calculate p_error not until after d_error. P_error is equal to the cte. Finally, i_error must be calculated. This is calculated by adding the cte to i_error. These 3 error components are needed for the calculation of the total error and were presented in lesson 12.12. This is calculated in a further function "TotalError". Within this function the error values updated from the previous function are used and calculated together with the coefficients that had to be initiated at the beginning. The total error can be calculated using the formula:  
+error_t=-K_p*p_error-K_d*d_error-K_i*i_error  
+This formula was presented in lesson 12.12 and takes into account the proportional error, the derivative error and the integral error. In the main.cpp file I called these functions. First the UpdateError function must be called with the read cte. Here the errors are updated. Afterwards I set the variable steer_Value equal to the function call "totalError", which returns the result of the above mentioned formula. Subsequently, it must be taken into account that the steering_value must not be greater than 1 or less than -1. This is done with a simple if statement. This statement checks if the steering_value is greater than 1 - in which case the steering value is set to 1 - and then with an else if statement if it is less than -1, in which case it is set to -1.  
+This completes the implementation of the PID controller. In the following it will be explained which impact a change of the coefficients has on the driving behaviour of the vehicle. For this purpose I first set the hyper parameters Kd, Ki and Kp to 0.0. This results in a total error of 0 and the vehicle does not steer. It drives straight ahead and leaves the track. This can be seen in video 1.  
+Video 2 shows the driving behaviour with Kp set to 1.0 and the remaining parameters set to 0.0. Here you can see that the vehicle is driving in a wavy line. The reason for this is that the use of the proportional element alone leads to a steering angle that is proportional to the crosstrackerror. However, this causes the problem that the vehicle will never drive exactly in the middle, but will rather shoot beyond the center.  
+Video 3 shows the usage of only the differential part. Because the d_error is calculated as the difference between the current cte and the cte from the previous step, and the cte is very small, the steering angle changes very little and the vehicle does not steer enough, but drives to the road's boundary. Since Kp=0 was set, the driven lane does not adapt to the middle of the lane.  
+The fourth video shows the vehicle when only the integral part is set to 1. Here it can be seen that the vehicle turns further with increasing distance and leaves the road. This is describable because the cte is added to the i_error each time. Again no P component is implemented so the vehicle does not turn back to the middle of the lane but the cte increases permanently and the vehicle leaves the lane.  
+Videos 5 and 6 show combinations of the previously individually tested components. In video 5, Kp is set to 0.5, Ki to 0.001 and Kd to 1.0. As you can see, the car steers too much and doesn't drive steadily straight. Video 6 shows the result when Kp is reduced to 0.25. Here the result is already quite good.  
+After further testing I came to the result, that the values Kp=0.15, Ki=0.001 and Kd=1.5 lead to a satisfying result for me. I came to the conclusion by following the procedure suggested in the Udacity Knowledge base (https://knowledge.udacity.com/questions/297913). At first, I only varied the Kp value. Then I increased Kd and Ki in a slow manner. Finally, I reduced the Kp value again because I felt that the vehicle was driving too much in a snakelike way. As can be seen in the "Final", the car drives around the course without any problems and does not leave the track. But the selection of the parameters took some time manually. A more efficient way would be to use the Twiddle algorithm shown in the exercises, where the hyper parameters are tweaked automatically. However, since my manual trying also led to a solution, I decided not to implement it.
+
 ---
 
 ## Dependencies
@@ -36,63 +49,4 @@ Fellow students have put together a guide to Windows set-up for the project [her
 4. Run it: `./pid`. 
 
 Tips for setting up your environment can be found [here](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/23d376c7-0195-4276-bdf0-e02f1f3c665d)
-
-## Editor Settings
-
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
-
-* indent using spaces
-* set tab width to 2 spaces (keeps the matrices in source code aligned)
-
-## Code Style
-
-Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
-
-## Project Instructions and Rubric
-
-Note: regardless of the changes you make, your project must be buildable using
-cmake and make!
-
-More information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/e8235395-22dd-4b87-88e0-d108c5e5bbf4/concepts/6a4d8d42-6a04-4aa6-b284-1697c0fd6562)
-for instructions and the project rubric.
-
-## Hints!
-
-* You don't have to follow this directory structure, but if you do, your work
-  will span all of the .cpp files here. Keep an eye out for TODOs.
-
-## Call for IDE Profiles Pull Requests
-
-Help your fellow students!
-
-We decided to create Makefiles with cmake to keep this project as platform
-agnostic as possible. Similarly, we omitted IDE profiles in order to we ensure
-that students don't feel pressured to use one IDE or another.
-
-However! I'd love to help people get up and running with their IDEs of choice.
-If you've created a profile for an IDE that you think other students would
-appreciate, we'd love to have you add the requisite profile files and
-instructions to ide_profiles/. For example if you wanted to add a VS Code
-profile, you'd add:
-
-* /ide_profiles/vscode/.vscode
-* /ide_profiles/vscode/README.md
-
-The README should explain what the profile does, how to take advantage of it,
-and how to install it.
-
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
-repo root to avoid clutter. My expectation is that most profiles will include
-instructions to copy files to a new location to get picked up by the IDE, but
-that's just a guess.
-
-One last note here: regardless of the IDE used, every submitted project must
-still be compilable with cmake and make./
-
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
 
